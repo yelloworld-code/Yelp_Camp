@@ -39,7 +39,9 @@ module.exports.validateCampground = (req, res, next) => {
 module.exports.isAuthor = async (req, res, next) => {
     const { id } = req.params;
     const campground = await Campground.findById(id);
-    if (!campground.author.equals(req.user._id)) {
+    if (!campground.author.equals(req.user._id)) {     
+        //equals is a mongoose method to compare the id of the author of the campground with the id of the currently logged in user, if they are not equal, then the user is not the author of the campground and we will redirect them back to the campground page with an error message
+        //req.user._id is coming from the session, thnx to passport, we are also passing it to every route (check app.js)
         req.flash('error', 'You do not have permission to do that!');
         return res.redirect(`/campgrounds/${id}`);
     }
