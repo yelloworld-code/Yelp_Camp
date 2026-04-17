@@ -35,9 +35,23 @@ module.exports.login = (req, res) => {
     res.redirect(redirectUrl);
 }
 
-module.exports.logout = (req, res) => {
-    req.logout();   //this method is coming from passport
-    // req.session.destroy();
-    req.flash('success', "Goodbye!");
-    res.redirect('/campgrounds');
+module.exports.logout = (req, res, next) => {
+    req.logout(function (err) { 
+        //this method is coming from passport, and it takes a callback function,
+        //  which will be called after the user is logged out, 
+        // and it will pass an error if there's any error during the logout process
+        if (err) {
+            return next(err);
+        }
+        req.flash('success', 'Goodbye!');
+        res.redirect('/campgrounds');
+    });
 }
+
+//old version of logout, without the callback function, which is not recommended anymore, since it doesn't handle the error case
+// module.exports.logout = (req, res) => {
+//     req.logout();   //this method is coming from passport
+//     // req.session.destroy();
+//     req.flash('success', "Goodbye!");
+//     res.redirect('/campgrounds');
+// }
