@@ -15,6 +15,10 @@ module.exports.isLoggedIn = (req, res, next) => {
     // console.log("REQ.USER:", req.user);   //this is automatically coming from the session, thnx to passport, we are also passing it to every route (check app.js)
     if (!req.isAuthenticated()) { 
         //isAuthenticated() is coming from passport and is automatically added to req object, all that serilize and deserilize is taking care of this
+        req.session.returnTo = req.originalUrl; 
+        //this is to store the url that the user is trying to access, so that after login, we can redirect them back to that url, 
+        // this is useful when the user is trying to access a protected route and they are not logged in, after they login, 
+        // they will be redirected back to that protected route instead of the default route
         req.flash('error', 'You must be signed in first!');
         return res.redirect('/login');
     }
@@ -60,4 +64,11 @@ module.exports.validateReview = (req, res, next) => {
     } else {
         next();
     }
+}
+
+module.exports.storeReturnTo = (req, res, next) => {
+    if (req.session.returnTo) {
+        res.locals.returnTo = req.session.returnTo;
+    }
+    next();
 }

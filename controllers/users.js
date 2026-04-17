@@ -30,8 +30,8 @@ module.exports.renderLogin = (req, res) => {
 module.exports.login = (req, res) => {
     req.flash('success', 'welcome back!');
     // --> what is this returnTo, check app.use() of the app.js file, the route setup section
-    const redirectUrl = req.session.returnTo || '/campgrounds';
-    delete req.session.returnTo;
+    const redirectUrl = res.locals.returnTo || '/campgrounds';
+    // delete req.session.returnTo;
     res.redirect(redirectUrl);
 }
 
