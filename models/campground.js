@@ -16,22 +16,22 @@ ImageSchema.virtual('thumbnail').get(function () {
     // https://res.cloudinary.com/douqbebwk/image/upload/w_300/v1600113904/YelpCamp/gxgle1ovzd2f3dgcpass.png
 });
 
-const opts = { toJSON: { virtuals: true } }; 
+const opts = { toJSON: { virtuals: true } };
 //By default, Mongoose does not include virtuals when you convert a document to JSON. Which is what we need (data in JSON),
 //the popup we generate for cluster map is a virtual (defined below), that has link to go to each campground
 //A virual is defined bcz, so that we can dynamicaly create what we need in advance on our side without having to mess with the database much
 const CampgroundSchema = new Schema({
     title: String,
     images: [ImageSchema],
-    geometry: {     //fowardgeocoding api returns data in this format
+    geometry: {
         type: {
             type: String,
             enum: ['Point'],
-            required: [true, 'Type is required']
+            required: true
         },
         coordinates: {
             type: [Number],
-            required: [true, 'Coordinates are required']
+            required: true
         }
     },
     price: Number,
@@ -51,7 +51,7 @@ const CampgroundSchema = new Schema({
 
 CampgroundSchema.virtual('properties.popUpMarkup').get(function () {
     return `
-    <strong><a href="/campgrounds/${this._id}">${this.title}</a><strong>
+    <strong><a href="/campgrounds/${this._id}">${this.title}</a></strong>
     <p>${this.description.substring(0, 20)}...</p>`
 });
 

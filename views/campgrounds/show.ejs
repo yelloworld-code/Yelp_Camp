@@ -2,6 +2,7 @@
 <link rel="stylesheet" href="/stylesheets/stars.css">
 <div class="row">
     <div class="col-6">
+        <div id="map" style="width: 100%; height: 300px;"></div>
         <div id="campgroundCarousel" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
                 <% campground.images.forEach((img, i) => {  %>
@@ -101,10 +102,9 @@
     </div>
 </div>
 
-<script>
-    const mapToken = '<%-process.env.MAPBOX_TOKEN%>'; //ejs does not evaluate while including a script, the broser requires this script, so ejs does not evaluate on client side 
-    //so we create this mapToken variable here and access it down the line where it is needed (in /javscripts/showPageMap.js)
-    const campground = <%- JSON.stringify(campground) %> //same for this, technially, we are sending data from server side to client side
-</script>
+<%-"<script>"%>
+const maptilerApiKey = '<%- process.env.MAPTILER_API_KEY %>';
+const campground = <%- JSON.stringify(campground) %>;
+<%-"</script>"%>
 
 <script src="/javascripts/showPageMap.js"></script>
